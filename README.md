@@ -49,8 +49,10 @@ For Counterfact, there are two modes of evaluation: (1) batch editing and (2) st
     `python main.py --eval_type counterfact_llama --evaluation_mode batch`
 6. Llama-2-7b cross-dataset editing
     `python main.py --eval_type counterfact_llama --evaluation_mode stream`
+##
+All projectors can be trained by using the `--force_train` flag. Example usage:
+`python main.py --eval_type counterfact_llama --evaluation_mode stream --force_train`
 
-   
 All results are stored in the results subfolder.
 
 
@@ -64,14 +66,14 @@ For further assistance, email:
 
 ### 📎 Citation
 ```bibtex
-@misc{rizwan2024resolving,
-    title={Resolving Lexical Bias in Edit Scoping with Projector Editor Networks},
-    author={Rizwan, Hammad and Rosati, Domenic and Wu, Ga and Sajjad, Hassan},
-    year={2025},
-    eprint={2408.10411},
-    archivePrefix={arXiv},
-    primaryClass={cs.CV}
+@inproceedings{rizwan2025resolving,
+  title     = {Resolving Lexical Bias in Edit Scoping with Projector Editor Networks},
+  author    = {Rizwan, Hammad and Rosati, Domenic and Wu, Ga and Sajjad, Hassan},
+  booktitle = {Proceedings of the 42nd International Conference on Machine Learning (ICML)},
+  year      = {2025},
+  note      = {To appear}
 }
+
 ```
 
 ### License
