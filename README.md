@@ -23,16 +23,22 @@ For ZsRE, there are two modes of evaluation: (1) batch editing and (2) cross-dat
 
 
 1. T5 batch editing
+   
    `python main.py --eval_type zsre_t5 --evaluation_mode batch`
-2. T5 cross-dataset editing
+3. T5 cross-dataset editing
+   
    `python main.py --eval_type zsre_t5 --evaluation_mode transferlearning`
-3. GPT-2XL batch editing
+5. GPT-2XL batch editing
+   
    `python main.py --eval_type zsre_gpt2xl --evaluation_mode batch`
-4. GPT-2XL cross-dataset editing
+7. GPT-2XL cross-dataset editing
+   
    `python main.py --eval_type zsre_gpt2xl --evaluation_mode transferlearning`
-5. Llama-2-7b batch editing
+9. Llama-2-7b batch editing
+    
     `python main.py --eval_type zsre_llama --evaluation_mode batch`
-6. Llama-2-7b cross-dataset editing
+11. Llama-2-7b cross-dataset editing
+    
     `python main.py --eval_type zsre_llama --evaluation_mode transferlearning`
 
 ## Counterfact
@@ -40,16 +46,22 @@ For Counterfact, there are two modes of evaluation: (1) batch editing and (2) st
 
 
 1. T5 batch editing
+   
    `python main.py --eval_type counterfact_t5 --evaluation_mode batch`
-2. T5 cross-dataset editing
+3. T5 cross-dataset editing
+   
    `python main.py --eval_type counterfact_t5 --evaluation_mode stream`
-3. GPT-2XL batch editing
+5. GPT-2XL batch editing
+   
    `python main.py --eval_type counterfact_gpt2xl --evaluation_mode batch`
-4. GPT-2XL cross-dataset editing
+7. GPT-2XL cross-dataset editing
+   
    `python main.py --eval_type counterfact_llama --evaluation_mode stream`
-5. Llama-2-7b batch editing
+9. Llama-2-7b batch editing
+    
     `python main.py --eval_type counterfact_llama --evaluation_mode batch`
-6. Llama-2-7b cross-dataset editing
+11. Llama-2-7b cross-dataset editing
+    
     `python main.py --eval_type counterfact_llama --evaluation_mode stream`
 ##
 All projectors can be retrained by using the `--force_train` flag. Example usage:
