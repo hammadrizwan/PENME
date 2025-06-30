@@ -9,7 +9,9 @@ Model editing aims to modify the outputs of large language models after they are
 
 ##  Evaluation Overview
 
-We evaluate PENME (Projector Editor Networks for Model Editing) across two major benchmarks: Counterfact and zsRE, and on multiple transformer architectures including T5-small, GPT2-XL, and LLaMA-2 7B. The evaluation focuses on three key criteria: **Edit Success**, **Generalization to paraphrases**, and **Locality**, i.e., preventing undesired changes to unrelated prompts. We provide pretrained projector networks and codebooks at **URL TBD**.
+We evaluate PENME (Projector Editor Networks for Model Editing) across two major benchmarks: Counterfact and zsRE, and on multiple transformer architectures including T5-small, GPT2-XL, and LLaMA-2 7B. The evaluation focuses on three key criteria: **Edit Success**, **Generalization to paraphrases**, and **Locality**, i.e., preventing undesired changes to unrelated prompts. 
+
+We provide pretrained projector networks and codebooks at **URL TBD**, and dataset vector files at **URL TBD**.
 
 ## Environment Setup
 Setting up the Python environment:
@@ -50,7 +52,7 @@ For Counterfact, there are two modes of evaluation: (1) batch editing and (2) st
 6. Llama-2-7b cross-dataset editing
     `python main.py --eval_type counterfact_llama --evaluation_mode stream`
 ##
-All projectors can be trained by using the `--force_train` flag. Example usage:
+All projectors can be retrained by using the `--force_train` flag. Example usage:
 `python main.py --eval_type counterfact_llama --evaluation_mode stream --force_train`
 
 All results are stored in the results subfolder.
