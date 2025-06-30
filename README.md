@@ -33,7 +33,7 @@ For ZsRE, there are two modes of evaluation: (1) batch editing and (2) cross-dat
 6. Llama-2-7b cross-dataset editing
     `python main.py --eval_type zsre_llama --evaluation_mode transferlearning`
 
-## ZsRE
+## Counterfact
 For Counterfact, there are two modes of evaluation: (1) batch editing and (2) stream editing/incremental editing
 
 
