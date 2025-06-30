@@ -33,9 +33,7 @@ def get_model_results(model,data_loader,threshold=0.5,comparison="sim",mode="sim
         predictions.append(sim)
 
       label=labels[0].item()
-      # print(label)
-      # if(label==1):
-      #   print("aloha",label)
+
       targets.append(label)
 
 

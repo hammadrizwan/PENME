@@ -115,50 +115,16 @@ def train_control_counterfact(openai_vectors_dict, edit_vectors_dict, neighbourh
   
   class_weights=[1.0,1.0]
 
-  
-  # if(loss_function=="cosine" or  loss_function=="cosine_crossentropy"):
-  #   train_data_loader=dpcounter.get_data_loader(dataset_paired_train,batch_size=8192,shuffle=True,device=device)
-  #   if(loss_function=="cosine_crossentropy"):
-  #     mode="classificaiton"
-  #     class_weights=torch.tensor(class_weights,dtype=torch.float)
-  #     criterion_classification = nn.CrossEntropyLoss(weight=class_weights).to(device)
-  #     model=SiameseClassificationNetwork(512).to(device)
-  #   else:
-  #     criterion_classification=None
-  #     mode="similarity"
-  #     model=SiameseNetwork(input_size=512, hidden_size1=256).to(device)
-  #   criterion_similarity = CosineSimilarityLoss_SentenceTransformers().to(device)
-  #   comparison="sim"
-  # elif(loss_function=="contrastive"):
-    # print("inside contrastive")
-    # dataset = dpcounter.LargeDataset(data_path=dataset_paired_train,device=device)
-    # print(dataset.__len__())
-    # sampler = dpcounter.ChunkSampler(dataset.__len__(), chunk_size=8192)
-    # train_data_loader = torch.utils.data.DataLoader(dataset, sampler=sampler,batch_size=8192)
-            #
-    # train_data_loader=dpcounter.get_data_loader(dataset_paired_train,batch_size=8192,shuffle=True,device=device)
-    # print("LOADER 2")
 
   train_data_loader=dpcounter.get_data_loader(dataset_paired_train,openai_vectors_dict, edit_vectors_dict, neighbourhood_train_vectors_dict,paraphrase_train_vectors_dict,batch_size=args.batch_size_training,device=device)
   
   
   model=SiameseNetwork(input_size=args.in_features, hidden_size1=args.out_features).to(device)
-  print(model)
   mode="similarity"
   comparison="dist"
   criterion_similarity=WeightedContrastiveLoss(margin=args.margin_loss, positive_weight=class_weights[1], negative_weight=class_weights[0]).to(device)
   criterion_classification=None
-  # else:
-  #   train_data_loader=dpcounter.get_data_loader_triplet(dataset_paired_train,batch_size=512,shuffle=True,device=device)
-  #   model=SiameseNetworkTriplet(512).to(device)
-  #   mode="similarity"
-  #   comparison="dist"
-  #   #12.0=MARGIN
-  #   criterion_similarity = nn.TripletMarginLoss(margin=10.0, p=2, eps=1e-7).to(device)
-  #   criterion_classification=None
-  #   optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)# for cosine use 0.00001 else 0.0001
-  #   model,file_path=train_model_triplet(model,optimizer,train_data_loader,criterion_similarity,path_to_folder,"best_model_weights.pth",early_stop_patience=early_stop_patience,device=device,epochs=epochs)
-  # return model,mode,comparison,file_path
+  
   
   step_size = 5  # Adjust step size as needed
   gamma = 0.1    # Factor by which to reduce learning rate

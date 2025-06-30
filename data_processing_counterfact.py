@@ -44,7 +44,7 @@ class CustomDataset(Dataset):
 
     def __getitem__(self, index):
         data_row=self.dataset[index]
-        # print("aloha",data_row,data_row[0])
+     
         if(data_row[-2]==0):#open ai paraphrase
             emb1 = hp.to_tensor(self.edit_vectors_dict[data_row[0]]).to(self.device)#, dtype=torch.float)
             emb2 = hp.to_tensor(self.openai_vectors_dict[data_row[0]][data_row[1]]).to(self.device)#, dtype=torch.float)
@@ -106,12 +106,6 @@ def create_dataset_pairs(dataset,neightbour_control=0,label_reversal=False,eval_
     paraphrase=1
     neightbour=0
 
-    # if(label_reversal==True):
-    #     paraphrase=0
-    #     neightbour=1
-    # else:
-    #     paraphrase=1
-    #     neightbour=0
 
     openai_vectors_dict={}
     edit_vectors_dict={}
@@ -156,7 +150,7 @@ def create_dataset_pairs(dataset,neightbour_control=0,label_reversal=False,eval_
                     dataset_paired_train.append([index,row_index,neightbour,row_index,
                                             row["edited_prompt"][0],row["neighborhood_prompts_high_sim"][index],2,0])
 
-                    # print(vector[:5],row["neighborhood_prompts_high_sim"][index],"high")
+                 
                 for index,vector in enumerate(row["vectors_neighborhood_prompts_low_sim"]):
                     if(row_index not in neighbourhood_test_vectors_dict.keys()):
                         neighbourhood_test_vectors_dict[row_index]={}
@@ -170,7 +164,7 @@ def create_dataset_pairs(dataset,neightbour_control=0,label_reversal=False,eval_
             paraphrase_test_vectors_dict[row_index]=row["vector_edited_prompt_paraphrases_processed_testing"]
 
             num_elements_to_select = min(3, len(row["openai_usable_paraphrases_embeddings"]))#add 5 max open ai paraphrases
-            # return  None, None, None, None, None, None, None, None
+
 
             sampled_indices, sampled_elements = zip(*random.sample(list(enumerate(row["openai_usable_paraphrases_embeddings"])), num_elements_to_select))# sample and get indexes
             for index,vector in zip(sampled_indices, sampled_elements):#create postive label with edit vector
@@ -204,12 +198,6 @@ def create_dataset_pairs(dataset,neightbour_control=0,label_reversal=False,eval_
                     dataset_paired_test.append([index,row_index,neightbour,row_index,
                                             row["edited_prompt"][0],row["neighborhood_prompts_low_sim"][index],2,0])                               
 
-        # print("openai_vectors_dict",openai_vectors_dict[0].shape)
-        # print("edit_vectors_dict",edit_vectors_dict[0].shape)
-        # print("neighbourhood_train_vectors_dict",neighbourhood_train_vectors_dict[0].shape)
-        # print("neighbourhood_test_vectors_dict",neighbourhood_test_vectors_dict[0].shape)
-        # print("paraphrase_train_vectors_dict",paraphrase_train_vectors_dict[0].shape)
-        # print("paraphrase_test_vectors_dict",paraphrase_test_vectors_dict[0].shape)
         
     return  openai_vectors_dict, edit_vectors_dict, neighbourhood_train_vectors_dict, neighbourhood_test_vectors_dict, paraphrase_train_vectors_dict, paraphrase_test_vectors_dict, dataset_paired_train, dataset_paired_test
 
@@ -262,10 +250,7 @@ def data_construct_high_sim(openai_vectors_dict, edit_vectors_dict, neighbourhoo
 
 
     print(vector_tensor_list_neighbours[0])
-    # print(sample)
-    # print(vector_list_neighbours[-1])
-    # print("vector_list_edits",len(vector_list_edits))
-    # print(len(vector_list_edits))
+
     c=0
     print("topk_neg",topk_neg)
     if(topk_neg!=0):
@@ -280,12 +265,7 @@ def data_construct_high_sim(openai_vectors_dict, edit_vectors_dict, neighbourhoo
                 dataset_processed.append([data_index_edit_neighbours[index],edit_index,neighbour,row_indexes_edits[index_vector],
                                                 edit_prompts[edit_index],neighbours_prompt[index],2,0])
 
-    # for i, j in tqdm(itertools.combinations(range(len(vector_list_edits)), 2)):
-    #     distance = util.cos_sim(vector_list_edits[i], vector_list_edits[j])
-    #     if (distance > 0.80):
-    #         dataset_processed.append([vector_list_edits[i],vector_list_edits[j],neighbour,row_indexes_edits[i],
-    #                                     edit_prompts[i],edit_prompts[j],2,0])
-    # print(type(vector_list_edits[0]))
+
     vectors_tensor = torch.stack(vector_tensor_list_edits)
     # for index,vector in enumerate(vector_list_edits):
     print("vectors_tensor",vectors_tensor.shape)
@@ -314,5 +294,5 @@ def data_construct_high_sim(openai_vectors_dict, edit_vectors_dict, neighbourhoo
             edit_prompts[i], edit_prompts[j], 2,0
         ])
     
-    print("pos sim done")
+    print("Pairings complete")
     return dataset_processed,neighbourhood_train_vectors_dict

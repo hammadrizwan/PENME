@@ -235,55 +235,9 @@ def data_construct_high_sim(edit_vectors_dict, neighbourhood_train_vectors_dict,
             vector_tensor_list_neighbours.append(sample[0][0])
             neighbours_prompt.append(sample[5])
             data_index_edit_neighbours.append(sample[-3].item())
-    # for sample in data_loader:
-    #     if(sample[2].item()==paraphrase):# only perfom for counterfact paraphrase not for openai
-    #         if(sample[-1].item()!=1):#only add edit phrase once
-    #             continue
-    #         vector_list_edits.append(sample[0].detach().cpu().numpy().tolist())
-    #         vector_tensor_list_edits.append(sample[0][0])
-    #         edit_prompts.append(sample[4])
-          
-    #         row_indexes_edits.append(sample[3].item())
-    #         data_index_edit.append(sample[3].item())
-    
-    #     else:
-    #         vector_list_neighbours.append(sample[0].detach().cpu().numpy().tolist())
-    #         vector_tensor_list_neighbours.append(sample[0][0])
-    #         neighbours_prompt.append(sample[5])
-    #         data_index_edit_neighbours.append(sample[-3].item())
-        # break
-    print("HELLOOO")
-    # print(vector_tensor_list_neighbours[0])
-
-
-    # c=0
-    # print("topk_neg",topk_neg)
-    # if(topk_neg!=0):
-    #     vectors = torch.stack(vector_tensor_list_neighbours)
-    #     for index_vector,(target_vector, edit_index) in enumerate(zip(vector_tensor_list_edits,data_index_edit)):# for each edit construct negative pairs across the dataset
-    #         # print(target_vector,vectors[0])
-    #         metric = util.cos_sim(target_vector,vectors)
-    #         # print(metric)
-    #         top_indices = torch.topk(metric, k=topk_neg).indices
-    #         for index in top_indices[0].cpu().numpy().tolist():
-    #         #   print(data_index_edit_neighbours[index])
-    #             dataset_processed.append([data_index_edit_neighbours[index],edit_index,neighbour,row_indexes_edits[index_vector],
-    #                                             edit_prompts[edit_index],neighbours_prompt[index],2,0])
-
-                                 
-    # print("done")  
-   
-    # for i, j in tqdm(itertools.combinations(range(len(vector_list_edits)), 2)):
-    #     distance = util.cos_sim(vector_list_edits[i], vector_list_edits[j])
-    #     if (distance > 0.80):
-    #         dataset_processed.append([vector_list_edits[i],vector_list_edits[j],neighbour,row_indexes_edits[i],
-    #                                     edit_prompts[i],edit_prompts[j],2,0])
-    # print(type(vector_list_edits[0]))
-    # print(vector_tensor_list_edits[0])
+  
     vectors_tensor = torch.stack(vector_tensor_list_edits)
-    # for index,vector in enumerate(vector_list_edits):
-    # print("vectors_tensor",vectors_tensor.shape)
-    # Compute the magnitudes of each vector
+  
     magnitudes = torch.norm(vectors_tensor, dim=1, keepdim=True)
 
     # Normalize each vector by dividing by its magnitude
@@ -293,14 +247,11 @@ def data_construct_high_sim(edit_vectors_dict, neighbourhood_train_vectors_dict,
 
     # Fill diagonal with zeros to avoid self-similarity
     similarity_matrix.fill_diagonal_(0)
-    # print("diag filled")
-    # Find indices where similarity is greater than 0.80
+
     indices = torch.nonzero(similarity_matrix > pos_sim, as_tuple=False)
     # print(indices[:5])
     indices = [[i.item(), j.item()] for i, j in indices if i < j]  # Ensure only one direction is considered
-    # print(len(indices))
-    # print(indices)
-    # Iterate over the indices and update dataset_processed
+d
     for i, j in tqdm(indices):
         if(data_index_edit[j] not in neighbourhood_train_vectors_dict[i].keys()):
             neighbourhood_train_vectors_dict[i][data_index_edit[j]]=vector_tensor_list_edits[j]#add to dict
@@ -309,6 +260,6 @@ def data_construct_high_sim(edit_vectors_dict, neighbourhood_train_vectors_dict,
                 edit_prompts[i][0], edit_prompts[j][0], 2,0])
     # for row in random.sample(dataset_processed,10):
     #     print(row)
-    print("pos sim done")
+    print("Pairings complete")
     return dataset_processed,neighbourhood_train_vectors_dict
 

@@ -6,20 +6,7 @@ from imports import nn,torch
 class SiameseNetwork(nn.Module):
     def __init__(self, input_size, hidden_size1=None):
         super(SiameseNetwork, self).__init__()
-        # self.fc = nn.Sequential(
-        #     nn.Linear(input_size, hidden_size1),
-        #     nn.ReLU(),
-        #     nn.Linear(hidden_size1, input_size),
-        #     # nn.ReLU()
 
-        # )
-        # self.fc = nn.Sequential(
-        #     nn.Linear(input_size, hidden_size1),
-        #     nn.LayerNorm(hidden_size1),  # Layer normalization replaces Batch normalization
-        #     nn.ReLU(),
-        #     nn.Linear(hidden_size1, input_size),
-        #     # nn.LayerNorm(input_size)     # Layer normalization replaces Batch normalization
-        # )
         self.fc = nn.Sequential(
             nn.Linear(input_size, hidden_size1),
             nn.BatchNorm1d(hidden_size1),  # Batch normalization added
@@ -27,7 +14,7 @@ class SiameseNetwork(nn.Module):
             nn.Linear(hidden_size1, input_size),
             nn.BatchNorm1d(input_size)     # Batch normalization added
         )
-        # self.temperature = 0.01
+      
     def forward_sequential(self, x):
         return self.fc(x)
 
@@ -35,7 +22,7 @@ class SiameseNetwork(nn.Module):
         output1 = self.forward_sequential(input1)
         output2 = self.forward_sequential(input2)
         return output1, output2
-        # return output1 / self.temperature, output2 / self.temperature
+      
 
 
 
