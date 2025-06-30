@@ -27,7 +27,7 @@ def parse_args(argv=None):
     parser.add_argument("--path_to_codebook_batch", type=str, default= "trained_projectors/t5/t5_counterfact_zsre_batch.json", help="type of projector to use")
     #
     ##################################### Projector ############################################
-    parser.add_argument("--force_train", type=bool, default= False, help="tau adjustment")# KEEP FALSE TO AVOID RETRAINING
+    parser.add_argument('--force_train', action='store_true', help="Force retraining regardless of saved projector.")# KEEP FALSE TO AVOID RETRAINING
     parser.add_argument("--pretrained_proj_path", type=str, default= "trained_projectors/t5/best_model_weights_zsre_t5.pth", help="path to pretrained projector")
 
     #only use with trainin off and transferlearning
