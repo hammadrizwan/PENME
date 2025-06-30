@@ -1,0 +1,114 @@
+from transformers import LlamaTokenizer, LlamaModel
+import torch
+import nethook
+import json
+from tqdm import tqdm
+import linecache
+from torch.utils.data import Dataset, DataLoader
+
+class ZSRE(Dataset):
+    def __init__(self, json_file_path,tokenizer):
+        with open(json_file_path, 'r') as jsonl_file:
+          lines = jsonl_file.readlines()
+        self.data = [json.loads(line) for line in lines]
+        self.tokenizer=tokenizer
+    def __len__(self):
+        return len(self.data)
+    
+
+    def __getitem__(self, idx):
+        item = self.data[idx]
+        return item
+
+def get_model(PATH: str,access_token:str,device ):
+
+    if PATH is None:
+        model = LlamaModel.from_pretrained("meta-llama/Llama-2-7b-hf")
+        tokenizer = LlamaTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf")
+    else:
+        model = LlamaModel.from_pretrained(
+            pretrained_model_name_or_path=PATH, 
+            token=access_token,
+            local_files_only=True,
+            use_safetensors=False
+        )
+        tokenizer = LlamaTokenizer.from_pretrained(
+        pretrained_model_name_or_path=PATH, 
+        token=access_token,
+        local_files_only=True,
+        use_safetensors=False
+        )
+    
+    model.to(device)
+    return model,tokenizer
+
+def get_embedding_dataset_avg_token(file_path,model,tokenizer,dataset,file_save_path,device):
+    data_loader = DataLoader(dataset, batch_size=1, shuffle=False)
+    counter=1
+ 
+    l=["layers.2.mlp.down_proj"]
+
+    with open(file_save_path, 'w') as jsonl_file_writer:
+        with nethook.TraceDict(model, l) as ret:
+            with torch.no_grad():
+                for batch in tqdm(data_loader, desc="Processing batches", leave=False):
+                    data_entry = json.loads(linecache.getline(file_path, counter).strip())
+                    # print(data_entry.keys())
+                    torch.cuda.empty_cache()
+                    # print(data_entry["edited_prompt"])
+                    data_entry["vector_edited_prompt"]=[]
+                    inputs=tokenizer(data_entry["edit_sentence"], return_tensors="pt")["input_ids"].to(device)    
+                    outputs = model(inputs, output_hidden_states=True)
+                    # print([ret[layer_fc1_vals].output.mean(dim=1).detach().cpu().numpy().tolist() for layer_fc1_vals in ret][0].shape)
+                    data_entry["vector_edited_prompt"]=[ret[layer_fc1_vals].output.mean(dim=1).detach().cpu().numpy().tolist() for layer_fc1_vals in ret][0]
+                    torch.cuda.empty_cache()
+            
+                    data_entry["vectors_neighbours_test"]=[]
+                    for string in data_entry["neighbours_test_question"]:
+                        torch.cuda.empty_cache()
+                        inputs=tokenizer(string, return_tensors="pt")["input_ids"].to(device)    
+                        outputs = model(inputs, output_hidden_states=True)
+                        data_entry["vectors_neighbours_test"].append([ret[layer_fc1_vals].output.mean(dim=1).detach().cpu().numpy().tolist() for layer_fc1_vals in ret][0])
+
+                    data_entry["vectors_neighbours_train"]=[]
+                    for string in data_entry["neighbours_train_question"]:
+                        torch.cuda.empty_cache()
+                        inputs=tokenizer(string, return_tensors="pt")["input_ids"].to(device)    
+                        outputs = model(inputs, output_hidden_states=True)
+                        data_entry["vectors_neighbours_train"].append([ret[layer_fc1_vals].output.mean(dim=1).detach().cpu().numpy().tolist() for layer_fc1_vals in ret][0])
+
+                    data_entry["vectors_paraphrases_train"]=[]
+                    for string in data_entry["paraphrases_train"]:
+                        torch.cuda.empty_cache()
+                        inputs=tokenizer(string, return_tensors="pt")["input_ids"].to(device)    
+                        outputs = model(inputs, output_hidden_states=True)
+                        data_entry["vectors_paraphrases_train"].append([ret[layer_fc1_vals].output.mean(dim=1).detach().cpu().numpy().tolist() for layer_fc1_vals in ret][0])
+
+
+                    data_entry["vectors_paraphrases_test"]=[]
+                    for string in data_entry["paraphrases_test"]:
+                        torch.cuda.empty_cache()
+                        inputs=tokenizer(string, return_tensors="pt")["input_ids"].to(device)    
+                        outputs = model(inputs, output_hidden_states=True)
+                        data_entry["vectors_paraphrases_test"].append([ret[layer_fc1_vals].output.mean(dim=1).detach().cpu().numpy().tolist() for layer_fc1_vals in ret][0])
+
+                    
+                    counter+=1
+                    json.dump(data_entry, jsonl_file_writer)
+                    jsonl_file_writer.write('\n')
+
+if __name__ == '__main__':
+    
+    device = torch.device("cpu")
+    print(device)
+    model_path=None#change if local path is needed
+    access_token=None#acess token for huggingface is needed
+    model,tokenizer=get_model(model_path,access_token,device)
+
+    file_path=""#path to the zsre dataset
+    zsre_dataset=ZSRE(file_path,tokenizer)
+    data_loader = DataLoader(zsre_dataset, batch_size=1, shuffle=False)
+
+    file_save_path=""#save path
+    get_embedding_dataset_avg_token(file_path,model,tokenizer,zsre_dataset,file_save_path,device)
+  
