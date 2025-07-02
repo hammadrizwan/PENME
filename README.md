@@ -76,7 +76,7 @@ All results are stored in the results subfolder.
 
 For further assistance, email: 
 
-*hammad.rizwan@dal.ca*
+*hammad (dot) rizwan (at) dal (dot) ca t*
 
 ### 📎 Citation
 ```bibtex
@@ -84,8 +84,7 @@ For further assistance, email:
   title     = {Resolving Lexical Bias in Edit Scoping with Projector Editor Networks},
   author    = {Rizwan, Hammad and Rosati, Domenic and Wu, Ga and Sajjad, Hassan},
   booktitle = {Proceedings of the 42nd International Conference on Machine Learning (ICML)},
-  year      = {2025},
-  note      = {To appear}
+  year      = {2025}
 }
 
 ```
