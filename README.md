@@ -76,7 +76,7 @@ All results are stored in the results subfolder.
 
 For further assistance, email: 
 
-*hammad (dot) rizwan (at) dal (dot) ca t*
+*hammad (dot) rizwan (at) dal (dot) ca*
 
 ### 📎 Citation
 ```bibtex
