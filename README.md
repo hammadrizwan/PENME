@@ -11,7 +11,7 @@ Model editing aims to modify the outputs of large language models after they are
 
 We evaluate PENME (Projector Editor Networks for Model Editing) across two major benchmarks: Counterfact and zsRE, and on multiple transformer architectures including T5-small, GPT2-XL, and LLaMA-2 7B. The evaluation focuses on three key criteria: **Edit Success**, **Generalization to paraphrases**, and **Locality**, i.e., preventing undesired changes to unrelated prompts. 
 
-We provide pretrained projector networks and codebooks at **URL TBD**, and dataset vector files at **URL TBD**.
+We provide pretrained projector networks and codebooks along with dataset vector files at **[PENME Github](https://dalu-my.sharepoint.com/:f:/g/personal/hm888458_dal_ca/Eij1zsmS8RRJlcEpbwCt9VYBBLTde4tCI0eZwSWjAg3exg?e=D299nE)**.
 
 ## Environment Setup
 Setting up the Python environment:
