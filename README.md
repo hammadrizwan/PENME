@@ -48,19 +48,19 @@ For Counterfact, there are two modes of evaluation: (1) batch editing and (2) st
 1. T5 batch editing
    
    `python main.py --eval_type counterfact_t5 --evaluation_mode batch`
-3. T5 cross-dataset editing
+3. T5 zero-shot generalization editing
    
    `python main.py --eval_type counterfact_t5 --evaluation_mode stream`
 5. GPT-2XL batch editing
    
    `python main.py --eval_type counterfact_gpt2xl --evaluation_mode batch`
-7. GPT-2XL cross-dataset editing
+7. GPT-2XL zero-shot generalization editing
    
    `python main.py --eval_type counterfact_llama --evaluation_mode stream`
 9. Llama-2-7b batch editing
     
     `python main.py --eval_type counterfact_llama --evaluation_mode batch`
-11. Llama-2-7b cross-dataset editing
+11. Llama-2-7b zero-shot generalizationediting
     
     `python main.py --eval_type counterfact_llama --evaluation_mode stream`
 ##
