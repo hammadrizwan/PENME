@@ -81,7 +81,7 @@ For further assistance, email:
 ### 📎 Citation
 ```bibtex
 @inproceedings{rizwan2025resolving,
-  title     = {Resolving Lexical Bias in Edit Scoping with Projector Editor Networks},
+  title     = {Resolving Lexical Bias in Model Editing},
   author    = {Rizwan, Hammad and Rosati, Domenic and Wu, Ga and Sajjad, Hassan},
   booktitle = {Proceedings of the 42nd International Conference on Machine Learning (ICML)},
   year      = {2025}
